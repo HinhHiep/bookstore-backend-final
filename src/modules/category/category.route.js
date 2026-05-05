@@ -6,4 +6,6 @@ const router = express.Router();
 // 🔥 Create category
 router.post("/", createCategory);
 
+
+
 export default router;
