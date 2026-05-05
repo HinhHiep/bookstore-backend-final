@@ -52,7 +52,7 @@ export const createCategory = async (data) => {
     name,
     slug,
     description: description || "",
-    parent: parent ? parent._id : null,
+    parentId: parent ? parent._id : null,
     image: image || "",
     sortOrder: sortOrder ?? 0,
     isFeatured: isFeatured ?? false,
@@ -79,9 +79,9 @@ export const getCategories = async (query) => {
   // parent filter
   if (parentId !== undefined) {
     if (parentId === "null") {
-      filter.parent = null; // lấy root
+      filter.parentId = null;
     } else {
-      filter.parent = parentId;
+      filter.parentId = parentId;
     }
   }
 
@@ -120,4 +120,31 @@ export const getCategories = async (query) => {
       totalPages: Math.ceil(total / limitNumber),
     },
   };
+};
+
+/**
+ * 📋 GET CATEGORY BY ID
+ */
+export const getCategoryById = async (id) => {
+  const category = await Category.findById(id).lean();
+
+  if (!category) {
+    const error = new Error("Category not found");
+    error.status = 404;
+    throw error;
+  }
+
+  return category;
+};
+
+/**
+ * 🌳 GET CHILDREN CATEGORIES
+ * 
+ */
+export const getChildrenCategories = async (parentId) => {
+  const children = await Category.find({ parentId })
+    .sort({ sortOrder: 1, createdAt: -1 })
+    .lean();
+
+  return children;
 };

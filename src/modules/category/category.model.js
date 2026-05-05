@@ -27,7 +27,7 @@ const categorySchema = new Schema(
     },
 
     // 🌳 Cấu trúc cây
-    parent: {
+    parentId: {
       type: Schema.Types.ObjectId,
       ref: "Category",
       default: null,
@@ -95,7 +95,7 @@ const categorySchema = new Schema(
 
 // ⚡ INDEX (rất quan trọng)
 categorySchema.index({ slug: 1 }, { unique: true });
-categorySchema.index({ parent: 1 });
+categorySchema.index({ parentId: 1 });
 categorySchema.index({ ancestors: 1 });
 categorySchema.index({ status: 1 });
 categorySchema.index({ name: "text", keywords: "text" });
@@ -104,14 +104,14 @@ categorySchema.index({ name: "text", keywords: "text" });
 // 🔥 BUILD TREE (middleware)
 categorySchema.pre("save", async function () {
   // 🌳 root category
-  if (!this.parent) {
+  if (!this.parentId) {
     this.ancestors = [];
     this.level = 0;
     return;
   }
 
   // 🔍 tìm parent
-  const parent = await mongoose.model("Category").findById(this.parent);
+  const parent = await mongoose.model("Category").findById(this.parentId);
 
   if (!parent) {
     const error = new Error("Parent category not found");

@@ -61,3 +61,24 @@ export const validateCreateCategory = (data) => {
     name: name.trim(),
   };
 };
+
+/**
+ * 🔥 VALIDATE OBJECT ID
+ */
+export const validateObjectId = (id) => {
+  if (!id || typeof id !== "string") {
+    const error = new Error("ID is required");
+    error.status = 400;
+    throw error;
+  }
+
+  // Check if it's a valid MongoDB ObjectId format (24 hex characters)
+  const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+  if (!objectIdRegex.test(id)) {
+    const error = new Error("Invalid ID format");
+    error.status = 400;
+    throw error;
+  }
+
+  return id;
+};
