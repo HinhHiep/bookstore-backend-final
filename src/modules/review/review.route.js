@@ -6,14 +6,17 @@ import {
   updateReview,
   deleteReview,
 } from "./review.controller.js";
+import { protect } from "../../common/middlewares/auth.middleware.js";
+import { authorize } from "../../common/middlewares/role.middleware.js";
+
 
 const router = express.Router();
 
 // 🔥 routes
-router.post("/", createReview);
-router.get("/", getReviews);
-router.get("/:id", getReviewById);
-router.put("/:id", updateReview);
-router.delete("/:id", deleteReview);
+router.post("/", protect, createReview);
+router.get("/", protect, getReviews);
+router.get("/:id", protect, getReviewById);
+router.put("/:id", protect, updateReview);
+router.delete("/:id", protect, authorize("admin"), deleteReview);
 
 export default router;
