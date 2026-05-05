@@ -118,6 +118,34 @@ export const refundOrder = async (req, res, next) => {
   }
 };
 
+export const checkout = async (req, res, next) => {
+  try {
+    const order = await orderService.checkout(
+      req.user._id,
+      req.body
+    );
+
+    return res.status(201).json({
+      status: "success",
+      data: order,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const guestCheckout = async (req, res, next) => {
+  try {
+    const order = await orderService.guestCheckout(req.body);
+
+    res.status(201).json({
+      status: "success",
+      data: order,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 
 

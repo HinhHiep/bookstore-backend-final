@@ -5,6 +5,9 @@ import promotionRoutes from "../modules/promotion/promotion.route.js";
 import reviewRoutes from "../modules/review/review.route.js";
 import authRoutes from "../modules/auth/auth.route.js";
 import userRoutes from "../modules/user/user.route.js";
+import cartRoutes from "../modules/cart/cart.route.js";
+import orderRoutes from "../modules/order/order.routes.js";
+
 
 const router = express.Router();
 
@@ -15,5 +18,7 @@ router.use("/promotions", promotionRoutes);
 router.use("/reviews", reviewRoutes);
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
+router.use("/cart", cartRoutes);
+router.use("/orders", orderRoutes);
 
 export default router;

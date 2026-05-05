@@ -289,3 +289,64 @@ export const getOrderById = async (orderId, user) => {
 
   return order;
 };
+
+import Cart from "../cart/cart.model.js";
+
+/**
+ * 🔥 CHECKOUT FROM CART
+ */
+export const checkout = async (userId, data) => {
+  // 1. lấy cart
+  const cart = await Cart.findOne({ userId });
+
+  if (!cart || cart.items.length === 0) {
+    throw new Error("Cart is empty");
+  }
+
+  // 2. convert cart → order items
+  const items = cart.items.map((item) => ({
+    bookId: item.bookId.toString(),
+    quantity: item.quantity,
+  }));
+
+  // 3. gọi createOrder (reuse logic)
+  const order = await createOrder(
+    {
+      items,
+      customerInfo: data.customerInfo,
+      paymentMethod: data.paymentMethod,
+    },
+    userId
+  );
+
+  // 4. clear cart
+  cart.items = [];
+  await cart.save();
+
+  return order;
+};
+
+export const guestCheckout = async (data) => {
+  const { items, customerInfo, paymentMethod } = data;
+
+  if (!items || items.length === 0) {
+    throw new Error("Items required");
+  }
+
+  if (!customerInfo) {
+    throw new Error("Customer info required");
+  }
+
+  // reuse createOrder
+  const order = await createOrder(
+    {
+      items,
+      customerInfo,
+      paymentMethod,
+    },
+    null // 👈 guest
+  );
+
+  return order;
+};
+
