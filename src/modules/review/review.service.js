@@ -94,6 +94,7 @@ export const getReviews = async (query) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNumber)
+      .populate("userId", "name email")
       .lean(),
 
     Review.countDocuments(filter),

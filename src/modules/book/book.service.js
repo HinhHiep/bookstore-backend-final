@@ -14,7 +14,6 @@ export const createBook = async (data) => {
     title,
     author,
     categoryId,
-    authorId,
     description,
     isbn,
     price,
@@ -69,7 +68,6 @@ export const createBook = async (data) => {
     title,
     slug,
     author,
-    authorId: authorId || null,
     description: description || "",
     isbn: isbn || null,
     categoryId,
@@ -97,7 +95,6 @@ export const createBook = async (data) => {
 export const getBooks = async (query) => {
   const {
     categoryId,
-    authorId,
     status,
     isFeatured,
     isNew,
@@ -114,10 +111,6 @@ export const getBooks = async (query) => {
 
   if (categoryId) {
     filter.categoryId = categoryId;
-  }
-
-  if (authorId) {
-    filter.authorId = authorId;
   }
 
   if (status) {
@@ -161,7 +154,6 @@ export const getBooks = async (query) => {
       .skip(skip)
       .limit(limitNumber)
       .populate("categoryId", "name slug")
-      .populate("authorId", "name")
       .lean(),
 
     Book.countDocuments(filter),
@@ -184,7 +176,6 @@ export const getBooks = async (query) => {
 export const getBookById = async (id) => {
   const book = await Book.findById(id)
     .populate("categoryId", "name slug description image")
-    .populate("authorId", "name bio")
     .lean();
 
   if (!book) {
@@ -252,7 +243,6 @@ export const updateBook = async (id, data) => {
     { new: true, runValidators: true }
   )
     .populate("categoryId", "name slug")
-    .populate("authorId", "name")
     .lean();
 
   return updated;

@@ -25,15 +25,19 @@ export const getCart = async (userId) => {
       // ❌ remove nếu book không tồn tại hoặc inactive
       if (!book || book.status !== "active") return null;
 
-      const finalPrice = book.finalPrice || book.price;
+      const finalPrice = book.discountPrice || book.price;
 
       return {
         bookId: item.bookId,
+        id: item.bookId,
         title: book.title,
-        thumbnail: book.thumbnail,
+        author: book.author,
+        thumbnail: book.coverImage,
+        image: book.coverImage,
         price: book.price,
         finalPrice,
         quantity: item.quantity,
+        availableQuantity: book.quantity,
         total: finalPrice * item.quantity,
       };
     })
@@ -65,7 +69,7 @@ export const addToCart = async (userId, { bookId, quantity }) => {
     throw new Error("Book not found");
   }
 
-  if (book.stock < quantity) {
+  if (book.quantity < quantity) {
     throw new Error("Not enough stock");
   }
 
@@ -76,7 +80,7 @@ export const addToCart = async (userId, { bookId, quantity }) => {
   if (existing) {
     const newQty = existing.quantity + quantity;
 
-    if (newQty > book.stock) {
+    if (newQty > book.quantity) {
       throw new Error("Exceed stock");
     }
 
@@ -86,7 +90,7 @@ export const addToCart = async (userId, { bookId, quantity }) => {
       bookId,
       quantity,
       title: book.title,
-      thumbnail: book.thumbnail,
+      thumbnail: book.coverImage,
     });
   }
 
@@ -118,7 +122,7 @@ export const updateCartItem = async (userId, bookId, quantity) => {
       (i) => i.bookId.toString() !== bookId
     );
   } else {
-    if (quantity > book.stock) {
+    if (quantity > book.quantity) {
       throw new Error("Exceed stock");
     }
 
@@ -191,13 +195,13 @@ export const mergeCart = async (userId, guestItems) => {
     if (existing) {
       const newQty = existing.quantity + quantity;
 
-      existing.quantity = Math.min(newQty, book.stock);
+      existing.quantity = Math.min(newQty, book.quantity);
     } else {
       cart.items.push({
         bookId,
-        quantity: Math.min(quantity, book.stock),
+        quantity: Math.min(quantity, book.quantity),
         title: book.title,
-        thumbnail: book.thumbnail,
+        thumbnail: book.coverImage,
       });
     }
   }
