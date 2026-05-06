@@ -103,7 +103,6 @@ const promotionSchema = new Schema(
 );
 
 // ⚡ INDEXES
-promotionSchema.index({ status: 1 });
 promotionSchema.index({ startDate: 1, endDate: 1 });
 promotionSchema.index({ bookIds: 1 });
 promotionSchema.index({ event: 1 });

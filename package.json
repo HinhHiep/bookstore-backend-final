@@ -1,8 +1,14 @@
 {
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "seed": "node src/seeds/category.seed.js"
+    "seed": "node src/seeds/books-all-categories.seed.js",
+    "seed:promotions": "node src/seeds/promotion.seed.js",
+    "seed:reviews": "node src/seeds/review.seed.js",
+    "seed:users": "node src/seeds/user.seed.js",
+    "seed:orders": "node src/seeds/order.seed.js",
+    "seed:carts": "node src/seeds/cart.seed.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

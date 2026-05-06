@@ -66,7 +66,6 @@ const cartSchema = new Schema(
 /**
  * 📌 Index
  */
-cartSchema.index({ userId: 1 }, { unique: true });
 
 /**
  * 🚫 Validate: không cho quantity <= 0

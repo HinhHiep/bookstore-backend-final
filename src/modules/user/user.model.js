@@ -109,7 +109,6 @@ const userSchema = new Schema(
 );
 
 // Indexes
-userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ phone: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ status: 1 });

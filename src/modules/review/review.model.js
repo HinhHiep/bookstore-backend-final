@@ -49,10 +49,7 @@ const reviewSchema = new Schema(
   }
 );
 
-reviewSchema.index({ bookId: 1 });
-reviewSchema.index({ userId: 1 });
 reviewSchema.index({ rating: 1 });
-reviewSchema.index({ status: 1 });
 
 // ❗ Rule: 1 user chỉ review 1 lần / book
 reviewSchema.index({ bookId: 1, userId: 1 }, { unique: true });

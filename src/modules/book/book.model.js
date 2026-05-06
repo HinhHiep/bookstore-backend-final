@@ -15,7 +15,6 @@ const bookSchema = new Schema(
     slug: {
       type: String,
       required: true,
-      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -31,17 +30,8 @@ const bookSchema = new Schema(
       required: true,
       trim: true,
     },
-
-    authorId: {
-      type: Schema.Types.ObjectId,
-      ref: "Author",
-      default: null,
-    },
-
     isbn: {
       type: String,
-      unique: true,
-      sparse: true,
       trim: true,
     },
 
@@ -193,7 +183,6 @@ const bookSchema = new Schema(
 bookSchema.index({ slug: 1 }, { unique: true });
 bookSchema.index({ isbn: 1 }, { sparse: true, unique: true });
 bookSchema.index({ categoryId: 1 });
-bookSchema.index({ authorId: 1 });
 bookSchema.index({ status: 1 });
 bookSchema.index({ isFeatured: 1 });
 bookSchema.index({ isNew: 1 });
@@ -201,7 +190,10 @@ bookSchema.index({ isDiscount: 1 });
 bookSchema.index({ rating: -1 });
 bookSchema.index({ sold: -1 });
 bookSchema.index({ createdAt: -1 });
-bookSchema.index({ title: "text", author: "text", keywords: "text" });
+bookSchema.index(
+  { title: "text", author: "text", keywords: "text" },
+  { language_override: "textLanguage" }
+);
 
 // 🔥 MIDDLEWARE - Auto generate slug nếu không có
 bookSchema.pre("save", async function () {

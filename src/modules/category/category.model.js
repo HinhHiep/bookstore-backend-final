@@ -94,7 +94,6 @@ const categorySchema = new Schema(
 
 
 // ⚡ INDEX (rất quan trọng)
-categorySchema.index({ slug: 1 }, { unique: true });
 categorySchema.index({ parentId: 1 });
 categorySchema.index({ ancestors: 1 });
 categorySchema.index({ status: 1 });
